@@ -1,59 +1,159 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# EduHub 🎓
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+EduHub is a backend RESTful API for an **E-Learning Platform** built with **Laravel**.
+The system supports authentication, role-based access control, course management, lessons, and student progress tracking.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🔐 Authentication & Authorization
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* User registration & login using **Laravel Sanctum**
+* Token-based authentication (API-ready)
+* Role management using **Spatie Laravel Permission**
+* Default role: **Student**
+* Protected routes using `auth:sanctum`
 
-## Learning Laravel
+### 👥 Roles
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+* **Admin**: Full control over the system
+* **Teacher**: Can create and manage courses & lessons
+* **Student**: Can enroll, view lessons, and track progress
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 📚 Courses
 
-## Laravel Sponsors
+* Each course is created and owned by a **Teacher**
+* CRUD operations for courses
+* Public course listing
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 📖 Lessons
 
-### Premium Partners
+* Lessons belong to a course
+* Only the course teacher can manage lessons
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 📊 Progress Tracking
 
-## Contributing
+* Track student progress per lesson
+* Mark lessons as completed
+* View progress per course
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🧱 Tech Stack
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+* **Laravel 12**
+* **PHP 8+**
+* **Laravel Sanctum** (Authentication)
+* **Spatie Laravel Permission** (Roles & Permissions)
+* **MySQL** (Database)
+* **Postman** (API Testing)
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 📂 Project Structure
 
-## License
+```
+app/
+ ├── Http/
+ │   ├── Controllers/Api
+ │   ├── Requests
+ ├── Services
+ ├── Models
+ ├── Helpers
+routes/
+ ├── api.php
+tests/
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* **Controllers**: Handle HTTP requests
+* **Services**: Business logic layer
+* **Requests**: Validation layer
+* **Helpers**: API response formatting
+
+---
+
+## 🔑 Authentication Flow
+
+1. User registers → assigned `student` role by default
+2. User logs in → receives Sanctum token
+3. Token is used as `Bearer Token` for protected routes
+
+---
+
+## 📌 API Endpoints
+
+### Auth
+
+| Method | Endpoint           | Description       |
+| ------ | ------------------ | ----------------- |
+| POST   | /api/auth/register | Register new user |
+| POST   | /api/auth/login    | Login user        |
+| GET    | /api/auth/me       | Get current user  |
+| POST   | /api/auth/logout   | Logout user       |
+
+### Courses
+
+| Method | Endpoint          | Access  |
+| ------ | ----------------- | ------- |
+| GET    | /api/courses      | Public  |
+| POST   | /api/courses      | Teacher |
+| PUT    | /api/courses/{id} | Teacher |
+| DELETE | /api/courses/{id} | Teacher |
+
+### Lessons
+
+| Method | Endpoint                      | Access        |
+| ------ | ----------------------------- | ------------- |
+| GET    | /api/courses/{course}/lessons | Authenticated |
+| POST   | /api/courses/{course}/lessons | Teacher       |
+
+### Progress
+
+| Method | Endpoint                      | Access  |
+| ------ | ----------------------------- | ------- |
+| POST   | /api/progress/lesson/{lesson} | Student |
+| GET    | /api/progress                 | Student |
+
+---
+
+## 🧪 Testing
+
+* Feature tests using **PHPUnit**
+* Authentication, login, and role-based access tested
+
+Run tests:
+
+```bash
+php artisan test
+```
+
+---
+
+## ⚙️ Installation
+
+```bash
+git clone https://github.com/MuhamedElsayedd/EduHub.git
+cd EduHub
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+php artisan serve
+```
+
+---
+
+## 🧑‍💻 Author
+
+**Muhamed Elsayed**
+Backend / Full-Stack Developer
+📧 Email: [muhameddelsayed@gmail.com](mailto:muhameddelsayed@gmail.com)
+🔗 GitHub: [https://github.com/MuhamedElsayedd](https://github.com/MuhamedElsayedd)
+
+---
+
+## 📜 License
+
+This project is open-source and available under the **MIT License**.
