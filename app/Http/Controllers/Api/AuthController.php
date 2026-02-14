@@ -16,13 +16,14 @@ class AuthController extends Controller
         $data = $request->validated();
         $result = $authService->register($data);
 
-        return ApiResponse::success([
-            'user' => $result['user'],
-            'token' => $result['token'],
-            'message' => 'User registered successfully',
-        ]);
+        return ApiResponse::success(
+            [
+                'user'  => $result['user'],
+                'token' => $result['token'],
+            ],
+            'User registered successfully'
+        );
     }
-
 
     public function login(LoginRequest $request, AuthService $authService)
     {
@@ -30,11 +31,14 @@ class AuthController extends Controller
         $result = $authService->login($data);
 
         if ($result['success']) {
-            return ApiResponse::success([
-                'user' => $result['user'],
-                'token' => $result['token'],
-                'message' => 'User logged in successfully',
-            ]);
+            return ApiResponse::success(
+                [
+                    'user' => $result['user'],
+                    'token' => $result['token'],
+
+                ],
+                'User logged in successfully'
+            );
         } else {
             return ApiResponse::error($result['message'], $result['status']);
         }
@@ -43,17 +47,21 @@ class AuthController extends Controller
 
     public function myProfile(Request $request)
     {
-        return ApiResponse::success([
-            'user' => $request->user(),
-            'message' => 'User profile fetched successfully',
-        ]);
+        return ApiResponse::success(
+            [
+                'user' => $request->user(),
+            ],
+            'User profile fetched successfully'
+        );
     }
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return ApiResponse::success([
-            'message' => 'Logged out successfully',
-        ]);
+
+        return ApiResponse::success(
+            ['success' => true],
+            'Logged out successfully'
+        );
     }
 }

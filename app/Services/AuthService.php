@@ -38,6 +38,7 @@ class AuthService
             ];
         }
 
+        /** @var User $user */
         $user = Auth::user();
         $token = $user->createToken('api')->plainTextToken;
 
