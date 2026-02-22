@@ -2,9 +2,6 @@
 
 EduHub is a backend RESTful API for an **E-Learning Platform** built with **Laravel**.
 The system supports authentication, role-based access control, course management, lessons, and student progress tracking.
-
-
-
 ---
 
 ## 🚀 Features
